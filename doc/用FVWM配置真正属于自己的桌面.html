@@ -1,0 +1,1265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>用FVWM做自己的桌面</title>
+<!-- 2015-07-26 Sun 09:24 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Bienilz" />
+<meta  name="keywords" content="Fvwm Rox conky DIY 桌面" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="./style/org-css.css" />
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">用FVWM做自己的桌面</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. 前言</a></li>
+<li><a href="#sec-2">2. 学习步骤</a></li>
+<li><a href="#sec-3">3. 准备</a>
+<ul>
+<li><a href="#sec-3-1">3.1. 软件包</a></li>
+<li><a href="#sec-3-2">3.2. 字体</a></li>
+<li><a href="#sec-3-3">3.3. 图片</a></li>
+<li><a href="#sec-3-4">3.4. 参考资料</a></li>
+</ul>
+</li>
+<li><a href="#sec-4">4. 环境</a></li>
+<li><a href="#sec-5">5. 布局</a></li>
+<li><a href="#sec-6">6. 配置</a>
+<ul>
+<li><a href="#sec-6-1">6.1. 文件结构</a></li>
+<li><a href="#sec-6-2">6.2. 环境变量</a></li>
+<li><a href="#sec-6-3">6.3. 启动和退出</a></li>
+<li><a href="#sec-6-4">6.4. 颜色和主题</a></li>
+<li><a href="#sec-6-5">6.5. 默认设置</a></li>
+<li><a href="#sec-6-6">6.6. 鼠标和键盘绑定</a></li>
+<li><a href="#sec-6-7">6.7. 模块配置</a></li>
+<li><a href="#sec-6-8">6.8. 图标化</a></li>
+<li><a href="#sec-6-9">6.9. 函数库</a></li>
+<li><a href="#sec-6-10">6.10. 菜单</a>
+<ul>
+<li><a href="#sec-6-10-1">6.10.1. 菜单位置</a></li>
+<li><a href="#sec-6-10-2">6.10.2. 程序菜单</a></li>
+<li><a href="#sec-6-10-3">6.10.3. 窗口菜单</a></li>
+</ul>
+</li>
+<li><a href="#sec-6-11">6.11. FvwmScript脚本</a></li>
+</ul>
+</li>
+<li><a href="#sec-7">7. 后记</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> 前言</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+我是在大学时学习嵌入式系统的过程中步入Linux世界的，看过许多介绍和比
+较各种操作系统的文章，当然也包括王垠的文章《完全用Linux工作》，曾经
+追求三维桌面等绚丽的效果，也曾试图在文本界面下干所有事情以追求极致
+的效率。发现了Fvwm后，才知道炫丽与效率是可以完美统一的。于是在Fvwm
+上初步的探索。但是，正如前辈门所说，要掌握Fvwm真不简单，因为学业的
+原因，最后还是放弃了。如今，工作之余，想不断充实自我，于是重拾Fvwm
+之梦。用了两周时间证明，当真静心而为时，完成一个自己的桌面并不太难。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> 学习步骤</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+<a href="http://www.ctex.org/documents/shredder/fvwm_frame.html">FVWM简明使用指南</a> 是不可多得的中文入门指南，对常用命令、窗口上下文、鼠标和
+键盘、函数、窗口样式、菜单、按钮、模块等进行了讲解。但是要想真的学懂Fvwm，
+关键还在于自己动手做。自己动手又分两个阶段，一是改用别人的配置文件，二是
+自己从零开始写真正适合自己的配置文件。写配置文件时关键在推断，验证，坚持。
+推断就是思考控制预定效果的变量可能是哪个，在哪个手册里可以查到；验证就是
+按照所想到手册中查找，学习；坚持就是如果遇到困难千万不要放弃，再想办法吧。
+</p>
+
+<p>
+我在学习过程中查找了许多网上的资料，有些看似简单但却最大程度上影响着桌面
+外观的变量最作者们忽略了。比如虚拟桌面和FvwmPager之间的关系，Fvwm按钮的位
+置，桌面工作区的大小等。在这里，我不打算详细地记述配置的每一个步骤，只是
+把配置中的心得和体会记下来，与同仁们共享。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> 准备</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+要配置出满意的桌面，一些准备工作是必不可少的。
+</p>
+</div>
+
+<div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1"><span class="section-number-3">3.1</span> 软件包</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+下面这些软件包是必须的，保证Fvwm能呈现出与我的桌面一样的效果：
+</p>
+<ul class="org-ul">
+<li>Xorg 图形服务
+</li>
+<li>Fvwm 窗口管理器
+</li>
+<li>Rox 文件管理
+</li>
+<li>xwd 窗口dump工具
+</li>
+<li>ImageMagick 在脚本中处理图片的工具
+</li>
+<li>xloadimage 为桌面加载背景图片的工具
+</li>
+<li>xscreensaver 屏幕保护程序
+</li>
+<li>update-menu 用于自动为Fvwm生成菜单的脚本，依赖于menu软件包
+</li>
+<li>conky 系统监控和桌面美化。网上关于其如何配置的教程很多，除了一般
+系统监控，还可以显示新闻头条、天气等。我运用shell脚本实现对笔记
+本电池电量监控，做到了显示电量，电量不足是用声音报警，当电量低
+至某一数值时强制电脑休眠以保护数据。
+</li>
+</ul>
+
+<p>
+还有许多好软件值得一用，在这里推荐一下吧。
+</p>
+
+<ul class="org-ul">
+<li>Xterm 好用的终端，支持中文显示。
+</li>
+<li>Emacs 起强大的文件编辑器，神之编辑器，
+</li>
+<li>Gvim 轻量级的文件编辑器，编辑器之神
+</li>
+<li>gimp 类似于photoshop的图片处理工具
+</li>
+<li>gthumb 类似于Acdsee的图片查看器
+</li>
+<li>audacidus 音频播放器
+</li>
+<li>vlc 全能的视频播放器
+</li>
+<li>rox 高可定制的文件管理器
+</li>
+<li>recoll 桌面搜索利器
+</li>
+<li>libreoffice 办公套件，到5.0版了文档编辑器还有一个Bug：在Ms Word
+中设置了行列网络对齐的话用libreoffice打开出现版式不正确，把网格对齐去掉就可以了。
+</li>
+<li>udev USB设备监控服务。配合pmount和shell脚本实现U盘和移动硬盘自动挂载。
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2"><span class="section-number-3">3.2</span> 字体</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+任意你喜欢的字体，中文字体要求是 iso106460 编码。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-3" class="outline-3">
+<h3 id="sec-3-3"><span class="section-number-3">3.3</span> 图片</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+桌面背景、菜单和按钮均可使用图片，适当的图片为桌面增色不少。常用格
+式有 xpm 和 png，常用大小有 16x16, 22x22, 32x32, 64x64，根据实际情
+况定制大小也可以。桌面背景图片要根据显示分辨率进行下载，或者下载后用gimp
+等处理相应大小。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-4" class="outline-3">
+<h3 id="sec-3-4"><span class="section-number-3">3.4</span> 参考资料</h3>
+<div class="outline-text-3" id="text-3-4">
+<p>
+Fvwm的手册是最好的参考资料。关于Fvwm的总体的配置，比如屏幕、窗
+口、菜单、键盘、鼠标、颜色等在 "man fvwm" 中查看，关于各模块的在相应的模
+块中查找，如 "man fvwm-buttons"。
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> 环境</h2>
+<div class="outline-text-2" id="text-4">
+<pre class="example">
+Linux debian 3.2.0-4-amd64 #1 SMP
+Debian 3.2.57-3 x86_64 GNU/Linux
+fvwm 2.5.30 compiled on May 16 2012 at 00:12:14 with support for:
+ReadLine, RPlay, Stroke, XPM, PNG, SVG, Shape, XShm, SM, Bidi text,
+Xinerama, XRender, XCursor, XFT, NLS
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> 布局</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+我不主张一味追求炫酷而忽略易用，配置的桌面要”简洁、高效、优雅“，
+这也是我写程序的原则。我设想的桌面要有任务栏、菜单和快捷按钮、虚拟
+桌面、桌面图标、窗口列表等。
+</p>
+
+<!-- This HTML table template is generated by emacs 24.5.1 -->
+<table border="1">
+  <tr>
+    <td align="left" valign="top">
+      &nbsp;快捷按钮区(FvwmButtons,FvwmPager)&nbsp;&nbsp;
+    </td>
+    <td align="left" valign="top">
+      &nbsp;&nbsp;系统状态监控区（Conky)&nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" align="left" valign="top">
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;桌面工作区（FvwmIconBox，FvwmWinList）&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" align="left" valign="top">
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;任务栏（FvwmTaskBar）&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+</table>
+
+<p>
+貌似应该上张效果图才行啊：<a href="images/bienilz-shot-desktop.png"><img src="images/bienilz-shot-desktop-mini.png" alt="bienilz-shot-desktop-mini.png" /></a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> 配置</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+Fvwm的配置文件为"~/.fvwm/.fvwm2rc"，如果没找到，可自己创建一个。推
+荐的做法找一个样例文件进行修改，”/usr/share/fvwm/"下面的
+system.fvwm2rc-sample-95以及 system.fvwm2rc-support也是个选择，但是
+太大了，不适合入门级朋友。当然，你也可以在我的配置文件上进行修改。
+</p>
+
+<p>
+下面是配置过程中的注意事项：
+</p>
+</div>
+
+<div id="outline-container-sec-6-1" class="outline-3">
+<h3 id="sec-6-1"><span class="section-number-3">6.1</span> 文件结构</h3>
+<div class="outline-text-3" id="text-6-1">
+<p>
+配置文件要有好的结构，通常分为配置文件说明、环境变量设置、启动和退
+出函数、颜色与主题、默认设置、鼠标绑定、键盘绑定、光标、菜单样式、
+模块配置、功能函数库、菜单数据等。
+</p>
+
+<p>
+除此之外，Fvwm资源也需要良好的结构。
+</p>
+<ul class="org-ul">
+<li>images 存放图片和图标
+</li>
+<li>images/backgroud 存放桌面背景
+</li>
+<li>sounds 存放需用到的声音文件
+</li>
+<li>scripts 存放Conky脚本及其他脚本
+</li>
+<li>tmp 存放临时文件，比如窗口缩小时产生的图标、屏幕或窗口截图等
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-6-2" class="outline-3">
+<h3 id="sec-6-2"><span class="section-number-3">6.2</span> 环境变量</h3>
+<div class="outline-text-3" id="text-6-2">
+<p>
+ImagePath 用于设置图片所在目录， <b>注意</b> 路径末尾要有 <i>斜线</i> 。
+</p>
+
+<p>
+SetEnv 用于自定义环境变量，目的是便于文件的修改， <b>注意</b> 引用变量采
+用 <i>$[var]</i> 的形式。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-3" class="outline-3">
+<h3 id="sec-6-3"><span class="section-number-3">6.3</span> 启动和退出</h3>
+<div class="outline-text-3" id="text-6-3">
+<p>
+InitFunction 在Fvwm启动时运行，但重启时不运行。此时加载桌面背景，
+启动conky和屏保，删除临时文件夹中的数据。
+</p>
+
+<p>
+StartFunction 在Fvwm启动时和重启时均要运行。此时要加载相应模块。
+<b>注意</b> FvwmIndent、FvwmWinList这些模块由特定的按键触发，不需在此加载。
+FvwmEvent是为把自定的图标化函数DeThumbnail绑定到deiconfiy事件而必须加载的。
+</p>
+
+<p>
+ExitFunction 中要用 <b>All</b> (command) Close 才能把所有同名进程结束。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-4" class="outline-3">
+<h3 id="sec-6-4"><span class="section-number-3">6.4</span> 颜色和主题</h3>
+<div class="outline-text-3" id="text-6-4">
+<p>
+这里可以定义多个颜色和窗口装饰，供以后使用。窗口装饰可以用点线画，也可以
+用图片。具体如何定义，Fvwm简明使用指南中有介绍，手册中讲得更详细。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-5" class="outline-3">
+<h3 id="sec-6-5"><span class="section-number-3">6.5</span> 默认设置</h3>
+<div class="outline-text-3" id="text-6-5">
+<p>
+这里定义桌面大小，默认的窗口样式、字体、鼠标、焦点和位置策略、窗口
+动画等。
+</p>
+
+<p>
+DeskTopSize 定义虚拟桌面的大小，也决定了FvwmPager的行和列。我决定把
+FvwmPager模块用<a href="#SWALLOW">Swallow</a>放到FvwmButtons中，于是定义成把虚拟桌面定义成1行4
+列。 
+</p>
+
+<p>
+EwmhBaseStruts 定义了窗口最大化的位置，也就是桌面工作区的大小。 <b>注意</b>
+这里的最大化是 Maximize不加任何参数时的效果，而 "Maximize ewmhiwa true
+100 100" 会把窗口最大化到与 Screen 相同大小。在 fvwm 手册页中可查得
+<code>ewmhiwa causes fvwm to ignore the EWMH working area</code> 。<a href="#EWMH">7</a> 是窗口管理
+器的增强能力。
+</p>
+
+<p>
+另外桌面图标的位置却不是由 EwmhBaseStruts 决定的，而是由 IconBox 的样式
+决定的。
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-fvwm">SetEnv fvwm_icon_size 64
+Style * IconBox 1 50 -290 -50,IconGrid $[fvwm_icon_size] $[fvwm_icon_size]*9/16,IconFill t l
+</pre>
+</div>
+
+<p>
+这句话意为 IconBox 的大小是从距屏幕左侧 1 像素，上侧 50 像素的位置起，到距右侧
+290 像素，下侧 50 像素的位置； IconGrid 定义的网格的大小，每个网格只能放
+一个图标；IconFill 定义了图标填充的方向，其中 t 是 top，b 是 bottom ，l
+是 left ，r 是right 的简写。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-6" class="outline-3">
+<h3 id="sec-6-6"><span class="section-number-3">6.6</span> 鼠标和键盘绑定</h3>
+<div class="outline-text-3" id="text-6-6">
+<p>
+窗口上下文由下图表示，在绑定鼠标和键盘时都要用到：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-fvwm2rc"># -----------------------------------------------------------------
+# Contexts:
+#     R = Root Window                 rrrrrrrrrrrrrrrrrrrrrr
+#     W = Application Window          rIrrrrFSSSSSSSSSFrrrrr
+#     F = Frame Corners               rrrrrrS13TTTT642Srrrrr
+#     S = Frame Sides                 rIrrrrSwwwwwwwwwSrrrrr
+#     T = Title Bar                   rrrrrrSwwwwwwwwwSrrrrr
+#     I = Icon                        rIrrrrFSSSSSSSSSFrrrrr
+#                                     rrrrrrrrrrrrrrrrrrrrrr
+# Numbers are buttons: 1 3 5 7 9   0 8 6 4 2
+#
+# Modifiers: (A)ny, (C)ontrol, (S)hift, (M)eta, (N)othing
+# -----------------------------------------------------------------
+</pre>
+</div>
+
+<p>
+鼠标和键盘绑定的定义方式：
+</p>
+
+<p>
+Mouse    按钮    位置    修饰键    命令
+</p>
+
+<p>
+Key      按键    位置    修饰键    命令
+</p>
+
+<p>
+其中，鼠标的按钮用 1-5 个数字表示，1-左键，2-中键，3-右键，4-滚轮上滚，
+5-滚轮下滚。位置就是窗口上下文，用数字和字母表示，可同时指定多个位置，修
+饰键中 A-任何按键，N-不按键。
+</p>
+
+<p>
+下面是两个例子：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-fvwm"># 按Ctrl键同时鼠标左键点击窗口标题位置让窗口最大化
+Mouse 1     T       C   Maximize
+# 不管鼠标在任何位置，按Shift + Ctrl + F7,将所有窗口最小化，即显示桌面
+Key   F7    A       SC  FuncFvwmIconifyAll
+Key   F10   A       C   Pick Thumbnail
+</pre>
+</div>
+
+<p>
+<b>注意</b> 键盘绑定中的 Pick 意为命令作用在获取焦点的窗口上，如果没有窗口具
+有焦点，则要求鼠标选择一个对象，并将命令作用其上。
+</p>
+
+<p>
+接下来，对于鼠标和快捷键，你想怎么改就怎么改，一切由你定。
+</p>
+
+<p>
+下面是绑定的快捷键，仅供参考：
+</p>
+
+<pre class="example">
+Alt+F1             终端
+Ctrl+F1            Fvwm控制台
+Alt+F2             家目录
+Ctrl+F2            我的电脑（/media）
+Alt+F4             关闭窗口
+Ctrl+Shift+F4      关机对话框
+Alt+F5             隐藏窗口
+Alt+F6             窗口右移一个桌面
+Ctrl+F6            窗口左移一个桌面
+Ctrl+Shift+F7      最小化所有窗口
+Alt+F10            窗口最大化
+Ctrl+F10           窗口最小化
+Ctrl+Shift+F10     窗口最大化到与屏幕一致
+Alt+F11            显示窗口属性
+Alt+F12            窗口截图
+Ctrl+F12           桌面截图
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-6-7" class="outline-3">
+<h3 id="sec-6-7"><span class="section-number-3">6.7</span> 模块配置</h3>
+<div class="outline-text-3" id="text-6-7">
+<p>
+Fvwm可用模块有：
+</p>
+
+<ul class="org-ul">
+<li>FvwmAnimate (produces animation effects when a window is iconified or de-iconified)
+</li>
+<li>FvwmAuto (an auto raise module)
+</li>
+<li>FvwmBacker (to change the background when you change desktops)
+</li>
+<li>FvwmBanner (to display a spiffy XBM, XPM, PNG or SVG)
+</li>
+<li>FvwmButtons (brings up a customizable tool bar)
+</li>
+<li>FvwmCommandS(a command server to use with shell's FvwmCommand client)
+</li>
+<li>FvwmConsole (to execute fvwm commands directly)
+</li>
+<li>FvwmCpp (to preprocess your config with cpp)
+</li>
+<li>FvwmDebug (to help debug fvwm)
+</li>
+<li>FvwmDragWell (the place to drag&amp;drop to)
+</li>
+<li>FvwmEvent (trigger various actions by events)
+</li>
+<li>FvwmForm (to bring up dialogs)
+</li>
+<li>FvwmGtk (to bring up GTK menus and dialogs)
+</li>
+<li>FvwmIconBox (like the mwm IconBox)
+</li>
+<li>FvwmIconMan (a flexible icon manager)
+</li>
+<li>FvwmIdent (to get window info)
+</li>
+<li>FvwmM4 (to preprocess your config with m4)
+</li>
+<li>FvwmPager (a mini version of the desktop)
+</li>
+<li>FvwmPerl (a Perl manipulator and preprocessor)
+</li>
+<li>FvwmProxy (to locate and control obscured windows by using small proxy windows)
+</li>
+<li>FvwmRearrange (to rearrange windows)
+</li>
+<li>FvwmSave (saves the desktop state in .xinitrc style)
+</li>
+<li>FvwmSaveDesk (saves the desktop state in fvwm commands)
+</li>
+<li>FvwmScript (another powerful dialog toolkit)
+</li>
+<li>FvwmScroll (puts scrollbars on any window)
+</li>
+<li>FvwmTabs (a generic tabbing module)
+</li>
+<li>FvwmTaskBar (a Windows like task bar)
+</li>
+<li>FvwmTheme (managed colorsets obsolete)
+</li>
+<li>FvwmWharf (an AfterStep like button bar)
+</li>
+<li>FvwmWindowMenu (a configurable fvwm menu listing current windows)
+</li>
+<li>FvwmWinList (a window list).
+</li>
+</ul>
+
+<p>
+我用到的模块有：FvwmAuto-窗口自动提升,FvwmAnimate-窗口放大缩小动
+画,FvwmEvent-事件钩子, FvwmTaskBar-任务栏,FvwmButtons-快捷按钮
+FvwmPager-虚拟桌面显示, FvwmIconBox-桌面缩略图标, FvwmWinList-窗口列
+表,FvwmConsole-Fvwm控制台,FvwmScript-关机对话框,FvwmIndent-窗口属性信息。
+</p>
+
+<p>
+用" Style 模块 设置 " 设置窗口的样式，这时决定相应模块是否有标题，
+是不可移动，是否在WindowList中显示等。
+</p>
+
+<p>
+FvwmPager中显示了虚拟桌面，它可以被Swallow到按钮中，FvwmWinList就
+是在用Alt+Tab进时显示的窗口列表。
+</p>
+
+<p>
+FvwmButtons、FvwmPager、 FvwmTaskBar和FvwmWinList的位置、大小、显
+示效果、键盘和鼠标行为的配置请看相应手册。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-8" class="outline-3">
+<h3 id="sec-6-8"><span class="section-number-3">6.8</span> 图标化</h3>
+<div class="outline-text-3" id="text-6-8">
+<p>
+这只是一个炫酷的效果罢，借助第三方工具xwd在桌面上显示窗口的快照图
+标。图标的摆放位置由IconBox的大小、位置、方向等设置确定。
+</p>
+
+<p>
+这里有个关键就是在窗口最大化时要执行图标删除操作，用FvwmEvent实现：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-fvwm">*FvwmEvent: deiconify DeThumbnail
+</pre>
+</div>
+
+<p>
+意思是当触发 deiconify 事件时，执行自定义函数 DeThumbnail,因为Thumbnail
+在生成了一些临时图片，要由 DeThumbnail 函数来删除，自能由事件触发。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-9" class="outline-3">
+<h3 id="sec-6-9"><span class="section-number-3">6.9</span> 函数库</h3>
+<div class="outline-text-3" id="text-6-9">
+<p>
+函数库中定义了多次使用的功能函数，比如显示消息，屏幕截图等。主要函数有：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-fvwm">FuncFvwmIconifyAll              ----  所有窗口最小化，显示桌面
+FuncFvwmShowMessage title msg   ----  在以title为标题的对话框中显示msg
+FuncFvwmWindowCreateScreenshot  ----  生成窗口快照并存在~/.fvwm/tmp文件夹下
+FuncFvwmDesktopCreateScreenshot ----  生成桌面快照并存在~/.fvwm/tmp文件夹下
+FuncFvwmViewInfo cmd            ----  在终端中查看命令cmd的info手册
+FuncFvwmViewManPage cmd         ----  在终端中查看cmd的man手册
+FuncFvwmViewFile file           ----  在终端中用less查看文件file
+FuncFvwmEditFile file           ----  检查可用是编辑器并打开文件file
+FuncFvwmOpenURL url             ----  检查可用的浏览器并打开链接url
+FuncFvwmRunInXterm title cmd    ----  在终端中运行命令cmd
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-6-10" class="outline-3">
+<h3 id="sec-6-10"><span class="section-number-3">6.10</span> 菜单</h3>
+<div class="outline-text-3" id="text-6-10">
+<p>
+下面是定义的一个菜单的例子：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-fvwm">DestroyMenu MenuFvwmRoot
+AddToMenu   MenuFvwmRoot
++ "Root Menu" Title
++ "X终端%mini.term.xpm%" Exec exec xterm
+......
+</pre>
+</div>
+
+<p>
+以上例子定义了标题为"Root Menu"的菜单，只有一个名为"X终端"的选项，
+该选项前面显示有一个名为"mini.term.xpm"的图片，点击此选项会打开一个
+Xterm终端。使用此菜单需要用 MenuFvwmRoot。
+</p>
+
+<p>
+我把菜单按功能分为程序菜单和窗口菜单，顾名思义，程序菜单中可执行程序，窗
+口菜单与窗口有关。两种菜单的定义方式都是一样的，区别在于响应的事件和显示
+的位置不同。
+</p>
+</div>
+
+<div id="outline-container-sec-6-10-1" class="outline-4">
+<h4 id="sec-6-10-1"><span class="section-number-4">6.10.1</span> 菜单位置</h4>
+<div class="outline-text-4" id="text-6-10-1">
+<div class="org-src-container">
+
+<pre class="src src-fvwm">Menu menu-name [position] [double-click-action]
+</pre>
+</div>
+
+<p>
+这句命令用来绑定已定义的菜单到指定的动作上，menu-name 是菜单名，如
+前例则为 MenuFvwmRoot，position指定了弹出的菜单显示在屏幕上的位置，
+double-click-action 指定按钮被双击时执行的命令。这里重点是position
+参数的设定，如果设置不恰当，则达不到想好的效果。
+</p>
+
+<p>
+position 由以下几部分指定：
+</p>
+
+<p>
+<code>[context-rectangle] x y [special-options]</code>
+</p>
+
+<p>
+context-rectangle 可以是以下几个常量中的一个：
+</p>
+<ul class="org-ul">
+<li>Root 当前屏幕的根窗口，即桌面。
+</li>
+<li>XineramaRoot 多显示器显示时的根窗口，如果Xinerama未开启，则等同 Root。
+</li>
+<li>Mouse 鼠标单击位置
+</li>
+<li>Window 窗口边框
+</li>
+<li>Interior 窗口内容区
+</li>
+<li>Title 窗口或图标的标题处
+</li>
+<li>Button&lt;n&gt; 在窗口的第n号按钮上
+</li>
+<li>Icon 窗口的图标
+</li>
+<li>Menu 当前菜单
+</li>
+<li>Item 当前菜单的当前选项
+</li>
+<li>Context 当前菜单、窗口或图标
+</li>
+<li>This 光标下面的任何部件
+</li>
+<li>Rectangle &lt;geometry&gt; 用几何字窜指定的一个矩形
+</li>
+</ul>
+
+<p>
+x 和 y 是相对于 context-rectangle 默认位置的偏移，默认情况下 x 和 y
+指的是相应内容矩形宽和长的百分比，如果数值后加上 m, 则表示要显示菜单
+宽和长的百分比，如果以 p 结尾，则数值指的是像素。如果数值前有 o&lt;N&gt; ,则
+表示在其他位移发生前先将菜单的百分之N的像素和矩形的百分之N重叠在一
+起。可以用 c 表示 o50。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-10-2" class="outline-4">
+<h4 id="sec-6-10-2"><span class="section-number-4">6.10.2</span> 程序菜单</h4>
+<div class="outline-text-4" id="text-6-10-2">
+<p>
+菜单的定义非常简单，但是如果你安装一个软件就要修改一次Fvwm的配置文件的
+话，反而麻烦了，所以为了之后的不麻烦，我宁愿现在麻烦点。我要自动把安装
+的软件添加到程序菜单中，必须要仰仗 update-menus 这个脚本，update-menus
+依赖于menu，所以你必须安装它才能工作。另外，还要进行一行必要的设置：
+</p>
+
+<ul class="org-ul">
+<li>打开/etc/menu-methods/fvwm，修改 rootsection=""，下次运行
+update-menus 在.fvwm/下生成的menudefs.hook中的菜单就可怪挂在二
+级菜单下。
+</li>
+
+<li>通常debian仓库中的包会在/usr/share/menu目录下添加menu所需的配
+置，如 果打包者没有添加或者你是手动编译安装软件，则需在此目录
+下手动添 加相应的配置文件。配置文件的格式请查看手册。
+</li>
+
+<li>要特别注意的是，update-menus在默认情况下会检查dpkg数据库的，
+如果不是 通过apt或者dpkg安装的软件包，即使在此目录下添加了配
+置文件，也不 会为其生成菜单，所以在fvwm2rc中要用"update-menus
+&#x2013;nodpkgcheck"
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-6-10-3" class="outline-4">
+<h4 id="sec-6-10-3"><span class="section-number-4">6.10.3</span> 窗口菜单</h4>
+<div class="outline-text-4" id="text-6-10-3">
+<p>
+窗口菜单要力争简洁实用，我只保留了"移动、最小化、最大化、隐藏、关闭、销
+毁、右移一页、左移一页、属性"这几项。把快捷键也标识在菜单上，以备在你不
+记得时可以看一看。
+</p>
+
+<p>
+将窗口菜单绑定在点击窗口标题栏或点击任务栏图标上。
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-fvwm">Mouse 1     1       A   Menu MenuFvwmWindowOps
+Mouse 3     1       A   Menu MenuFvwmwindowOps
+Mouse 3     T       A   Menu MenuFvwmWindowOps
+*FvwmTaskBar: Action Click3 Menu MenuFvwmWindowOps Mouse +0 -100m
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-6-11" class="outline-3">
+<h3 id="sec-6-11"><span class="section-number-3">6.11</span> FvwmScript脚本</h3>
+<div class="outline-text-3" id="text-6-11">
+<p>
+Fvwm具有脚本解释功能，并包括许多有用的工具，比如：FvwmScript-BaseConfig
+（基本设置） 、 FvwmScript-Colorset（颜色）、 FvwmScript-KeyboardSetup
+（键盘）、FvwmScript-PointerSetup（光标）等设置，把这些功能添加到菜单中
+是明智之举。
+</p>
+
+<p>
+别忘了还有一个有用的工具：FvwmScript-Quit。默认的Fvwm脚本中就使用了它，
+只是如果系统不经过一定配置的话，需要Root权限的操作不会起作用。采取如下
+操作：
+</p>
+
+<ul class="org-ul">
+<li>安装sudo，并配置当前用户执行sudo不用输入密码。相关操作请查看手册。
+</li>
+<li>修改/usr/local/share/fvwm/FvwmScript-Quit，修改相关操作的命令，
+当然你 也可以在添加几个选项，比如：sudo s2ram 进行休眠。
+</li>
+</ul>
+
+<p>
+看看我定做的关机对话框吧。<img src="images/bienilz-shot-window-shutdown.png" alt="bienilz-shot-window-shutdown.png" />
+</p>
+
+<p>
+FvwmScript脚本由5部分构成，头部是窗口属性和所有部件的默认属性，第二
+部分写脚本在启动时运行的指令，第三部分写每秒运行的指令，第四部分写
+脚本退出时执行的指令，最后一部分写上各个部件的描述。每个部件是11种
+控制中的一种： 标签, 单行文本输入, 单选按钮, 复选框, 按钮, 水平和
+垂直滚动条, 矩行, 弹出菜单, swallowexecs，迷你滚动条。
+</p>
+
+<p>
+虽然脚本语言很简单，但是没有一定编程基础的朋友掌握起来比较困难，我
+把自己的FvwmScript-Quit代码贴出来，供大家参考。
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-fvwmscript">#WindowTitle {Quit}
+WindowTitle {小二，过来}
+WindowSize 400 295       # Taille
+WindowPosition 191 143       # Position
+#ForeColor   {black}
+#BackColor   {grey85}
+#ShadowColor {grey55}
+#HilightColor    {grey100}
+#Font        -adobe-helvetica-bold-r-*-*-12-*
+
+Init
+ Begin
+  WarpPointer 1
+  Set $ToDo = Logout
+  ChangeValue 6 1
+  ChangeValue 7 0
+  ChangeValue 8 0
+  ChangeValue 9 0
+  ChangeValue 10 0
+  ChangeValue 12 0
+ End
+
+Widget 1
+Property
+ Position 40 40
+ Flags NoReliefString NoFocus
+ Type ItemDraw
+ Icon shutdown.xpm
+Main
+ Case message of
+  SingleClic :
+  Begin
+  End
+End
+
+Widget 2
+Property
+ Size 370 230
+ Position 15 15
+ Type Rectangle
+Main
+ Case message of
+  SingleClic :
+  Begin
+  End
+End
+
+Widget 3
+Property
+# Title { What do you want to do? }
+ Title { 客官，请问您有什么需要? }
+ Position 100  8
+ Flags NoReliefString NoFocus
+ Type ItemDraw
+ Value 0
+# Font -adobe-helvetica-bold-r-*-*-12-*
+Main
+ Case message of
+  SingleClic :
+  Begin
+  End
+End
+
+Widget 4
+Property
+# Title {OK}
+ Title {确定}
+ Size 60 28
+ Position 300 255
+ Flags NoReliefString
+ Type PushButton
+ Value 1
+Main
+ Case message of
+  SingleClic :
+  Begin
+   If $ToDo == Logout Then
+    Do {Quit}
+   Else
+   Begin
+    If $ToDo == Restart Then
+     Do {Restart}
+    Else
+    Begin
+     If $ToDo == RestartWith Then
+      Do {Restart } (GetTitle 11)
+     Else
+     Begin
+     If $ToDo == Reboot Then
+      Begin
+      Do {Exec sudo sync}
+      Do {Exec sudo reboot}
+      Quit
+      End
+     Else
+      Begin
+     If $ToDo == Poweroff Then
+      Begin
+      Do {Exec sudo sync}
+      Do {Exec sudo poweroff}
+      Quit
+      End
+     Else
+      Begin
+      Do {Exec sudo sync}
+      Do {Exec sudo s2ram}
+      Quit
+      End
+     End
+     End
+    End
+   End
+  End
+End
+
+Widget 5
+Property
+# Title {Cancel}
+ Title {取消}
+ Size 60 28
+ Position 40 255
+ Flags NoReliefString
+ Type PushButton
+ Value 1
+Main
+ Case message of
+  SingleClic :
+  Begin
+   Quit
+  End
+End
+
+Widget 6
+Property
+# Title {Logout}
+ Title {注销}
+ Position 90 45
+ Flags NoReliefString
+ Type RadioButton
+ Value 0
+Main
+ Case message of
+  SingleClic :
+  Begin
+   ChangeValue 7 0
+   ChangeValue 8 0
+   ChangeValue 9 0
+   ChangeValue 10 0
+   ChangeValue 12 0
+   Set $ToDo = Logout
+  End
+End
+
+Widget 7
+Property
+# Title {Restart fvwm}
+ Title {重启FVWM}
+ Position 90 75
+ Flags NoReliefString
+ Type RadioButton
+ Value 0
+Main
+ Case message of
+  SingleClic :
+  Begin
+   ChangeValue 6 0
+   ChangeValue 8 0
+   ChangeValue 9 0
+   ChangeValue 10 0
+   ChangeValue 12 0
+   Set $ToDo = Restart
+  End
+End
+
+Widget 8
+Property
+# Title {Restart with:}
+ Title {带参数重启FVWM:}
+ Position 90 105
+ Flags NoReliefString
+ Type RadioButton
+ Value 0
+Main
+ Case message of
+  SingleClic :
+  Begin
+   ChangeValue 6 0
+   ChangeValue 7 0
+   ChangeValue 9 0
+   ChangeValue 10 0
+   ChangeValue 12 0
+   Set $Todo = RestartWith
+  End
+End
+
+Widget 11
+Property
+ Position 215 100
+ Size 120 15
+ Type TextField
+ Title {}
+Main
+ Case message of
+  SingleClic :
+  Begin
+  End
+End
+
+
+Widget 9
+Property
+# Title {Shut down the computer}
+ Title {关闭计算机}
+ Position 90 135
+ Flags NoReliefString
+ Type RadioButton
+ Value 0
+Main
+ Case message of
+  SingleClic :
+  Begin
+   ChangeValue 6 0
+   ChangeValue 7 0
+   ChangeValue 8 0
+   ChangeValue 10 0
+   ChangeValue 12 0
+   Set $ToDo = Poweroff
+  End
+End
+
+Widget 10
+Property
+# Title {Restart the computer}
+ Title {重启计算机}
+ Position 90 165
+ Flags NoReliefString
+ Type RadioButton
+ Value 1
+Main
+ Case message of
+  SingleClic :
+  Begin
+   ChangeValue 6 0
+   ChangeValue 7 0
+   ChangeValue 8 0
+   ChangeValue 9 0
+   ChangeValue 12 0
+   Set $ToDo = Reboot
+  End
+End
+
+
+Widget 12
+Property
+ Title {休眠计算机}
+ Position 90 195
+ Flags NoReliefString
+ Type RadioButton
+ Value 1
+Main
+ Case message of
+  SingleClic :
+  Begin
+   ChangeValue 6 0
+   ChangeValue 7 0
+   ChangeValue 8 0
+   ChangeValue 9 0
+   ChangeValue 10 0
+   Set $ToDo = Sleep
+  End
+End
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7"><span class="section-number-2">7</span> 后记</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+其实在网络上有许多人贴出了自己的配置文件，有优有劣，感谢 Desintegr
+(desintegr@free.fr)提供的配置文件。从 <a href="bienilz.fvwm2rc.tar.7z">这里</a> 下载我的配置文件，包括所
+需的脚本、图片和声音。
+</p>
+
+<p>
+经过不断修改和完善，我的桌面用起来还比较顺手，但是我知道这并不完美，
+也许它并不适合你，贴出配置仅供参考，适合自己的才是最好的。另外有几个
+名词需要解释一下，不然让那此英文比我还不好的同志们去查手册实在有些为
+难。
+</p>
+
+<p>
+<a id="PIPEREAD" name="PIPEREAD"></a> <b><code>PipeRead command [quiet]</code></b> Fvwm用PipeRead 从shell命令
+的输出中读入数据，如果command由多个单词构成，则要用引号括起来，从文
+件目录动态创建菜单要用到此方法。如果command 后跟上Quiet关键字，当找
+不到命令时不会产生告警。
+</p>
+
+<p>
+<a id="COMMANDEXPANSION" name="COMMANDEXPANSION"></a> <b><code>$[gt.str]、$[w.id]、$[w.name]</code></b> 你可能会在很多
+配置文件中看到这样形式的东西，这叫做命令扩展（command expansion），
+$[gt.str]根据当前Locale将str翻译成本地字符串，$[w.id]返回窗口的id，
+$[w.name]返回窗口的名称。详细请 man fvwm。
+</p>
+
+<p>
+<a id="EWMH" name="EWMH"></a> <b><code>EWMH</code></b> 是 EXTENDED WINDOW MANAGER HINTS 的缩写，不知如何
+译成中文，它是一种窗口管理的标准，用来说明屏幕上窗口工作区的范围。
+Fvwm是支持此标准的。如果关闭EWMH支持，则窗口工作区是整个屏幕。
+</p>
+
+<p>
+手册原文：~The EWMH specification introduces the notion of
+Working Area.  Without ewmh support the Working Area is the
+full visible screen (or all your screens if you have a multi
+head setup and you use Xinerama).~
+</p>
+
+<p>
+<a id="SWALLOW" name="SWALLOW"></a> <b><code>Swallow</code></b> 这是FvwmButtons一个神奇的功能，可以把其他X程
+序或者Fvwm模块吞进按钮中，比如在按键中显示Pager，时钟以及系统监控等。</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Bienilz</p>
+<p class="date">Created: 2015-07-26 Sun 09:24</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.5.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

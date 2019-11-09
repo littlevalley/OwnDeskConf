@@ -1,0 +1,968 @@
+#
+# Fvwm2 配置文件，Created by Bienilz @ 2015.06
+#  _______________________________________________________________
+# (   _________________________   ________________________________)
+#  ) (__  _  _  _    _  .      ) (  __ __  ____       .  ____* ___
+# (   __)( \/ )( \/\/ )/\/\ * (   )(  )  )(  __)* /\/\  (  __)/ __)
+#  ) ( .  \  /* \    //    \ . ) (  ) _ ( *) _). /    \* ) _).\__ \
+# (___)  * \/  . \/\/(_/\/\_) (___)(__(__)(____)(_/\/\_)(____)(___/
+###################################################################
+### 环境变量设置 
+###################################################################
+SetEnv themes black
+SetEnv fvwm_root $[HOME]/.fvwm
+#### Set image path
+SetEnv fvwm_image_path $[fvwm_root]/images
+ImagePath +:/home/bienilz/.fvwm/images/icons/
+ImagePath +:/home/bienilz/.fvwm/images/icons/buttons/
+ImagePath +:/home/bienilz/.fvwm/images/icons/mini.icons/
+ImagePath +:/home/bienilz/.fvwm/images/icons/small.icons/
+
+#### Set the wallpaper utility and wallpapers directory
+SetEnv fvwm_wallpaper_dir $[fvwm_image_path]/wallpapers
+SetEnv fvwm_wallpaper $[fvwm_wallpaper_dir]/tree.png
+
+#### Set the audio/mp3 directory
+SetEnv fvwm_audio_path $[HOME]/mp3/
+SetEnv fvwm_audio_exec "audacious --play"
+
+#### Set the video directory
+SetEnv fvwm_video_path $[HOME]/videos/
+SetEnv fvwm_video_exec "vlc"
+
+#### Set scripts path
+SetEnv fvwm_script_path $[FVWM_USERDIR]/scripts/
+
+#### Set playlits path
+SetEnv fvwm_playlist_path $[FVWM_USERDIR]/playlist
+
+#### Set default applications
+SetEnv browser firefox
+SetEnv music_player audacious
+SetEnv file_manager pcmanfm
+
+##################################################################
+
+
+
+##################################################################
+### 启动和退出
+##################################################################
+
+DestroyFunc StartFunction
+AddToFunc StartFunction
++ I Module FvwmButtons
++ I Module FvwmTaskBar
+## 鼠标在窗口上超过500毫秒自动提升
++ I Module FvwmAuto 500 Raise Nop
+## 在最大化和最小化过程中的动画
++ I Module FvwmAnimate
+## 用事件触发钩子程序
++ I Module FvwmEvent
+
+DestroyFunc InitFunction
+AddToFunc  InitFunction
++ I Exec exec xloadimage -onroot -fullscreen $[fvwm_wallpaper]
+#+ I Exec exec conky -c $[fvwm_script_path]/conkyrc &
++ I Exec exec xscreensaver -no-splash
++ I Exec exec rm $[FVWM_USERDIR]/tmp/*
+
+AddToFunc ExitFunction
++ I All (xscreensaver) Close
+#+ I All (conky) Close
+##################################################################
+
+
+##################################################################
+#### 颜色主题
+##################################################################
+#
+# I.   FVWM Colorsets (0 to 9)
+#       I.1. Default Colorsets
+#       I.2. Window Decorations
+#       I.3. Menu Colorsets
+#
+# II.  Module Colorsets (10 to 29)
+#       II.1. Common Colorsets
+#       II.2. Window List Module Colorsets
+#       II.3. Other Module Colorsets
+#       II.4. External Colorsets
+#
+# III. Application Colorsets (30 to 35)
+#
+# IV.  Start/Stop functions
+#
+# ===============================================================
+# I. FVWM Colorsets
+# ===============================================================
+
+# ----------------------
+# I.1. Default Colorsets
+# ----------------------
+
+# for feedback windows (like geometry window and NoteMessage) and FvwmScroll
+#
+Colorset 0 fg black, bg rgb:70/a0/a0
+
+# -----------------------
+# I.2. Window Decorations
+# -----------------------
+
+# The following colors are used in FvwmPager for the window colors
+# and in a title bar of windows (shade/hilight colors, computed from
+# the bg color, but might be specified directly by sh and hi).
+# The title bar background is defined below using TitleStyle.
+
+# window title, inactive and active
+#
+
+Colorset 1 VGradient 40 2 rgb:88/7b/66 1 rgb:66/5c/4c 1 rgb:88/7b/66, \
+	bg AliceBlue, fg gray80, fgAlpha 85, NoShape
+Colorset 2 VGradient 40 2 rgb:cc/b8/9a 1 rgb:99/8a/7b 1 rgb:cc/b8/9a, \
+	bg AliceBlue, fg white, NoShape
+
+# window borders, inactive and active
+#
+Colorset 3 fg black, bg rgb:88/7b/66, Plain, NoShape
+Colorset 4 fg black, bg rgb:cc/B8/9a, Plain, NoShape
+
+# background for window title, buttons and border
+#
+DestroyFunc FuncFvwmDecorBackground
+AddToFunc   FuncFvwmDecorBackground
++ I TitleStyle AllInactive Colorset 1 -- Raised
++ I TitleStyle AllActive   Colorset 2 -- Raised
+#
++ I ButtonStyle All Simple -- UseTitleStyle
+
+# -------------------
+# I.3. Menu Colorsets
+# -------------------
+
+# inactive menu item fg+bg and menu face if any
+#
+Colorset 5 fg white, HGradient 40 rgb:51/6c/90 rgb:3f/54/70, bg Linen, NoShape
+
+# active menu item fg+bg
+#
+Colorset 6 fg white, bg rgb:63/84/b0, Plain, NoShape
+
+# greyed menu item fg
+#
+Colorset 7 fg grey45, bg grey45, Plain, NoShape
+
+# -------------------------------------------------
+# Colorsets 8 and 9 are reserved for the future use.
+
+# ===============================================================
+# II. Module Colorsets
+# ===============================================================
+
+# ----------------------
+# II.1. Common Colorsets
+# ----------------------
+
+# default for modules
+# For FvwmButtons, FvwmPager, can be also used for FvwmIconMan, FvwmIconBox.
+#
+Colorset 10 fg black, bg rgb:80/A0/A0, Plain, NoShape
+
+# default hilight for modules
+# For hilighting a part of a button bar (some swallowed apps for example).
+
+Colorset 11 fg black, bg white, Plain, NoShape
+
+# special or funny: a gradient or a pixmap
+# May be used in certain FvwmButtons, FvwmIconMan, FvwmIconBox.
+#
+Colorset 12 fg black, bg rgb:80/A0/A0, \
+	VGradient 20 rgb:80/A0/A0 rgb:C0/F0/F0, NoShape
+
+# swallowed window: the hilight and shadow colors should be defined
+# (-hd of xclock and -hl of xload use sh, and -hl of xclock uses hi)
+#
+Colorset 13 fg black, bg rgb:70/8C/8C, hi black, sh gray40, \
+	Plain, NoShape
+
+# default #2
+# FvwmPager or to get more colors in FvwmButtons, can be set to 10.
+#
+Colorset 14 fg black, bg rgb:80/A0/A0, Plain, NoShape
+
+# default hilight #2
+# FvwmPager or to get more colors in FvwmButtons, can be set to 11.
+#
+Colorset 15 fg black, bg rgb:C0/F0/F0, Plain, NoShape
+
+# tips/balloons (TaskBar and FvwmPager)
+#
+Colorset 16 fg black, bg rgb:F0/F0/C0, Plain, NoShape
+
+# ----------------------------------
+# II.2. Window List Module Colorsets
+# ----------------------------------
+
+# standard item
+Colorset 17 fg black, bg rgb:80/A0/A0, Plain, NoShape
+
+# active item
+Colorset 18 fg black, bg rgb:A0/C8/C8, Plain, NoShape
+
+# iconified item
+Colorset 19 fg white, bg rgb:60/78/78, Plain, NoShape
+
+# pointed item
+Colorset 20 fg black, bg rgb:88/AA/AA, Plain, NoShape
+
+# ----------------------------
+# II.3. Other Module Colorsets
+# ----------------------------
+
+# FvwmIdent
+#
+Colorset 21 fg black, bg bisque, Plain, NoShape
+
+# FvwmConsole
+#
+Colorset 22 fg white, bg rgb:00/30/60, Plain, NoShape
+
+# transparent
+#Colorset 23 fg $[fg.cs10], bg $[bg.cs10], Transparent, Plain, NoShape
+
+# ------------------------
+# II.4. External Colorsets
+# ------------------------
+
+# ----------------------------
+# reserved for modules@: 24-25
+
+# ----------------------------------
+# reserved for the future use: 26-28
+
+# temporary colorset: 29, has no static definition, used dynamically
+
+# ===============================================================
+# III. Application Colorsets
+# ===============================================================
+
+# regular terminal (xterm, rxvt, Eterm)
+#
+Colorset 30 fg white, bg rgb:00/00/50, Plain, NoShape
+
+# admin terminal (su xterm)
+#
+Colorset 31 fg white, bg rgb:00/50/50, Plain, NoShape
+
+# remote terminal (ssh, telnet)
+#
+Colorset 32 fg white, bg rgb:50/00/00, Plain, NoShape
+
+# viewer terminal (man, less, tail -f)
+#
+Colorset 33 fg white, bg rgb:00/50/00, Plain, NoShape
+
+# application run in the terminal, text editor using ft-xrdb
+#
+Colorset 34 fg rgb:FF/FF/E8, bg rgb:30/48/48, Plain, NoShape
+
+# dialog main background (FvwmScript, FvwmForm, xmessage, ft-xrdb)
+#
+Colorset 35 fg black, bg rgb:80/A0/80, Plain, NoShape
+
+# dialog text area (FvwmScript, FvwmForm, xmessage, ft-xrdb)
+#
+Colorset 36 fg black, bg rgb:A0/C8/A0, Plain, NoShape
+
+# --------------------------------------------------
+# Colorsets 37 to 39 are reserved for the future use.
+
+# ===============================================================
+# IV. Start/Stop Functions:
+# ===============================================================
+
+# These functions are executed when you enter (Start) and when you leave
+# (Stop) this component. For example, in colors@blackbox they are used to
+# set/unset a good window "transparency" style ParentalRelativity/Opacity;
+# in colors@cde and colors@luthien these functions are used for more things.
+
+DestroyFunc FuncFvwmStartColors
+AddToFunc   FuncFvwmStartColors
+
+DestroyFunc FuncFvwmStopColors
+AddToFunc   FuncFvwmStopColors
+
+####  窗口装饰
+
+FuncFvwmDecorBackground
+
+Style "*" Button 1, Button 2, Button 4, Button 6
+
+# button relief follows the state
+Style "*" MWMButtons  
+
+AddButtonStyle 1 Vector 5 25x40@1 25x60@1 75x60@0 75x40@0 25x40@1
+AddButtonStyle 2 Vector 16 20x20@1 30x20@1 50x40@1 70x20@1 80x20@1 80x30@0 60x50@0 80x80@0 70x80@0 50x60@0 30x80@0 20x80@0 20x70@0 40x50@1 20x30@0 20x20@1
+AddButtonStyle 4 Vector 4 50x25@1 75x75@0 25x75@0 50x25@1
+AddButtonStyle 6 Vector 4 50x75@1 25x25@1 75x25@1 50x75@0
+
+ButtonStyle 1 - Clear MWMDecorMenu
+ButtonStyle 2 - Clear
+ButtonStyle 4 - Clear MWMDecorMax
+ButtonStyle 6 - Clear MWMDecorMin
+
+TitleStyle Height MinHeight 18
+
+DestroyFunc FuncFvwmReloadDecor
+AddToFunc   FuncFvwmReloadDecor
++ I FuncFvwmDecorBackground
++ I AddButtonStyle 1 Vector 5 25x40@1 25x60@1 75x60@0 75x40@0 25x40@1
++ I AddButtonStyle 2 Vector 16 20x20@1 30x20@1 50x40@1 70x20@1 80x20@1 80x30@0 60x50@0 80x80@0 70x80@0 50x60@0 30x80@0 20x80@0 20x70@0 40x50@1 20x30@0 20x20@1
++ I AddButtonStyle 4 Vector 4 50x25@1 75x75@0 25x75@0 50x25@1
++ I AddButtonStyle 6 Vector 4 50x75@1 25x25@1 75x25@1 50x75@0
++ I BorderStyle	Simple
++ I TitleStyle	Centered
++ I TitleStyle	-- Raised
++ I ButtonStyle	All -- Raised
++ I FuncFvwmOverRideWindowLook
+
+BorderStyle	Simple
+TitleStyle	Centered
+TitleStyle	-- Raised
+ButtonStyle	All -- Raised
+
+#################################################################
+
+
+
+#################################################################
+### 默认设置
+#################################################################
+
+#### Set the Desktop Size
+DeskTopSize 4 1
+
+EdgeScroll 0 0
+EdgeResistance 500  1 
+
+EdgeThickness 1
+ClickTime 300
+MoveThreshold 3
+
+## 窗口最大化的位置
+EwmhBaseStruts 0 0 40 25 
+
+Style rox  MinWindowSize 780p 520p,MaxWindowSize 1358p 700p
+
+#### 所有窗口的默认设置
+
+Style * MaxWindowSize 100 100
+Style * EdgeMoveDelay 500
+Style * EdgeMoveResistance 1
+Style * BorderWidth 1, HandleWidth 3
+Style *	FvwmBorder, FirmBorder
+
+## Fonts
+Style * *Font "-*-*-medium-r-*-*-12-*-*-*-*-*-iso10646-*"
+
+
+#### Focus and Placement
+ColormapFocus FollowsMouse
+#Style * ClickToFocus, ClickToFocusPassesClick, ClickToFocusRaises, \
+	MouseFocusClickRaises
+#Style * TileCascadePlacement
+#### Move and Resize
+OpaqueMoveSize unlimited
+Emulate FVWM
+HideGeometryWindow Never
+BugOpts FlickeringMoveWorkaround Off
+Style * ResizeOutLine
+Style * SnapAttraction 0
+Style * SnapGrid 1 1
+XorValue
+
+Style "*"           ClickToFocus,ClickToFocusPassesClick
+#Style "*"           SloppyFocus
+Style "*"         MouseFocusClickRaises
+Style "*"           WindowShadeShrinks, WindowShadeSteps 100
+#### Transient Windows and Animation 
+
+Style * DecorateTransient, DontRaiseTransient, DontLowerTransient, \
+	DontStackTransientParent, GrabFocusTransient
+Style * WindowShadeSteps 25, WindowShadeScrolls
+SetAnimation  10  -.01 0 .01 .03 .08 .18 .3 .45 .6 .75 .85 .90 .94 .97 .99 1.0
+
+#### Hints, Busy Cursor and Advanced 
+#### 设置有BUG时的响应
+BugOpts ModalityIsEvil on
+BusyCursor Read on, Wait on, ModuleSynchronous on,DynamicMenu True
+# Automatic detection of the color limit
+BugOpts MixedVisualWorkaround off
+BugOpts RaiseOverNativeWindows off
+ModuleTimeout 30
+## 一些提升兼容性的高级功能
+Style * MwmDecor, OLDecor, NoOverride, MwmFunctions, GNOMEUseHints
+Style * SaveUnderOff, BackingStoreOff
+
+## 关闭多屏支持
+Xinerama False
+XineramaSls False
+UnsetEnv FT_XINERAMA_PWIDTH
+
+#### 颜色主题
+DefaultColorset 0
+Style * Colorset 1
+Style * HilightColorset 2
+Style * BorderColorset 3
+Style * HilightBorderColorset 4
+
+DestroyModuleConfig FvwmScroll: Colorset*
+*FvwmScroll: Colorset 0
+
+DestroyModuleConfig FvwmIdent: *
+*FvwmIdent: Colorset 21
+
+DestroyModuleConfig FvwmScript: DefaultColorset*
+*FvwmScript: DefaultColorset 35
+
+DestroyModuleConfig FvwmFormDefault: Colorset*
+*FvwmFormDefault: Colorset 35
+
+DestroyModuleConfig FvwmFormDefault: ItemColorset*
+*FvwmFormDefault: ItemColorset 36
+
+###################################################################
+
+
+
+###################################################################
+### 鼠标绑定
+###################################################################
+
+# -----------------------------------------------------------------
+# Contexts:
+#     R = Root Window                 rrrrrrrrrrrrrrrrrrrrrr
+#     W = Application Window          rIrrrrFSSSSSSSSSFrrrrr
+#     F = Frame Corners               rrrrrrS13TTTT642Srrrrr
+#     S = Frame Sides                 rIrrrrSwwwwwwwwwSrrrrr
+#     T = Title Bar                   rrrrrrSwwwwwwwwwSrrrrr
+#     I = Icon                        rIrrrrFSSSSSSSSSFrrrrr
+#                                     rrrrrrrrrrrrrrrrrrrrrr
+# Numbers are buttons: 1 3 5 7 9   0 8 6 4 2
+#
+# Modifiers: (A)ny, (C)ontrol, (S)hift, (M)eta, (N)othing
+
+# -----------------------------------------------------------------
+#### Root Menus
+Mouse 1     R       A   -
+Mouse 3     R       A   Menu MenuFvwmRoot
+Mouse 2     R       A   WindowList NoCurrentDeskTitle
+
+#### Titlebar Buttons
+Mouse 1     1       A   Menu MenuFvwmWindowOps
+Mouse 3     1       A   Menu MenuFvwmwindowOps
+Mouse 1     6       A   Thumbnail
+Mouse 1     4       A   Maximize
+Mouse 1     T       C   Maximize
+Mouse 1     2       A   Close
+
+#### Window, Frame, Side, Others
+Mouse 1     FS      A   ResizeFunc
+Mouse 2     W       C   ResizeFunc
+Mouse 1     W       M   MoveFunc
+Mouse 3     W       M   ResizeFunc
+Mouse 3     TSIF    A   RaiseLower
+Mouse 3     T       A   Menu MenuFvwmWindowOps
+
+AddToFunc ResizeFunc "M" Resize
+AddToFunc MoveFunc   "M" Move
+
+#### Icons Binding
+Mouse 1     I       A   Thumbnail
+Mouse 2     I       A   Move
+
+#### Wheel Toggle Shade
+Mouse 4     T       N   WindowShade True
+Mouse 5     T       N   WindowShade False
+Mouse 4     TW      M   WindowShade True
+Mouse 5     TW      M   WindowShade False
+
+#### Mouse Gesture Binding
+Mouse 1     R       A   StrokeFunc
+Mouse 1     W       CM  StrokeFunc
+
+###################################################################
+
+
+
+
+###################################################################
+### 键盘绑定
+###################################################################
+
+IgnoreModifiers L25
+#Key Escape  A       M   SendToModule FvwmProxy ShowToggle
+
+Key Tab A M Windowlist Root c c NoCurrentDeskTitle
+
+#### Windows Key Root Menu
+Key Super_L  A  A   Menu MenuFvwmRoot
+Key Super_R  A  A   Menu MenuFvwmRoot
+
+#### Traditional Bindings
+Key F4 A        M   Pick Close
+#Key X  A        M   Pick Destroy
+
+#### Fvwm Special Bindings
+#Key R   A       CM  Restart
+Key F1   A       M   Exec exec xterm
+Key F1   A       C   Module FvwmConsole -terminal xterm
+Key F2   A       M   Exec exec $[file_manager]
+Key F2   A       C   Exec exec $[file_manager] /media/
+Key F3   A       M   FuncFvwmIconifyAll
+Key F4   A       SC  FvwmScript FvwmScript-Quit
+Key F5   A       M   Pick WindowShade
+Key F6   A       M   Pick AnimatedMove w+100 w
+Key F6   A       C   Pick AnimatedMove w-100 w
+Key F10  A       M   Pick Maximize
+Key F10  A       C   Pick Thumbnail
+Key F10  A       SC  Pick Maximize ewmhiwa true  100 100
+Key F11  A       M   Pick Module FvwmIdent
+Key F12  A       M   Pick FuncFvwmWindowCreateScreenshot
+
+# 应用程序启动快捷键
+Key F   A       SCM   FuncFvwmOpenURL "www.baidu.com"
+Key E   A       SCM   Exec exec emacs
+Key G   A       SCM   Exec exec gimp
+Key A   A       SCM   Exec exec audacious
+
+
+#### Pager Bindings
+Key Right A CM GoToPage +1p  0p
+Key Left  A CM GoToPage -1p  0p
+
+###################################################################
+
+
+
+
+
+
+###################################################################
+#### 光标 
+###################################################################
+
+CursorStyle ROOT         left_ptr		black	white
+CursorStyle POSITION     top_left_corner	black	white
+CursorStyle TITLE        top_left_arrow		black	white
+CursorStyle DEFAULT      top_left_arrow		black	white
+CursorStyle SYS          hand2			black	white
+CursorStyle MOVE         fleur			black	white
+CursorStyle RESIZE       sizing			black	white
+CursorStyle WAIT         watch			black	white
+CursorStyle MENU         top_left_arrow		black	white
+CursorStyle SELECT       crosshair		black	white
+CursorStyle DESTROY      pirate			black	white
+CursorStyle TOP          top_side		black	white
+CursorStyle RIGHT        right_side		black	white
+CursorStyle BOTTOM       bottom_side		black	white
+CursorStyle LEFT         left_side		black	white
+CursorStyle TOP_LEFT     top_left_corner	black	white
+CursorStyle TOP_RIGHT    top_right_corner	black	white
+CursorStyle BOTTOM_LEFT  bottom_left_corner	black	white
+CursorStyle BOTTOM_RIGHT bottom_right_corner	black	white
+CursorStyle TOP_EDGE     top_side		black	white
+CursorStyle RIGHT_EDGE   right_side		black	white
+CursorStyle BOTTOM_EDGE  bottom_side		black	white
+CursorStyle LEFT_EDGE    left_side		black	white
+CursorStyle STROKE       plus			black	white
+
+###################################################################
+
+
+
+
+###################################################################
+#### 菜单
+###################################################################
+
+MenuStyle * MenuFace, ActiveFore, HilightBack
+MenuStyle * MenuColorset 5, ActiveColorset 6, GreyedColorset 7
+MenuStyle * Hilight3DThickness 1
+MenuStyle * PopupDelayed, PopupDelay 150, PopdownDelayed, PopdownDelay 150
+MenuStyle * PopupOffset -5 100, TitleWarpOff
+MenuStyle * TitleUnderlines1, SeparatorsLong, TrianglesRelief
+MenuStyle * Animation, AutomaticHotkeysOff, DoubleClickTime
+MenuStyle * BorderWidth 2, SidePic, SideColor
+MenuStyle * PopupAsSubmenu, HoldSubmenus, SubmenusRight
+MenuStyle * ItemFormat "%.4s%.1|%.5i%.5l%.5l%.5r%.5i%2.3>%1|"
+MenuStyle * VerticalItemSpacing, VerticalTitleSpacing
+
+###################################################################
+
+
+
+
+###################################################################
+### 模块配置
+###################################################################
+
+Style FvwmButtons !Title, !Handles, Sticky, WindowListSkip, CirculateSkip,NeverFocus
+Style FvwmPager-Single !Title, !Handles, Sticky,WindowListSkip, CirculateSkip
+Style FvwmTaskBar !Title, !Handles, Sticky,WindowListSkip, CirculateSkip,NeverFocus
+Style FvwmWinList !Title, !Handles, Sticky,  WindowListSkip, CirculateSkip
+Style FvwmBanner	!Title, StaysOnTop, WindowListSkip, NeverFocus
+Style FvwmPager		!Title, !Handles, WindowListSkip
+Style FvwmIconMan	!Title, !Handles, WindowListSkip
+Style FvwmConsole	CirculateHit, FPGrabFocus, FPReleaseFocus
+Style FvwmForm		CirculateHit
+Style FvwmScript*	Slippery, CirculateHit
+Style FvwmScript-Quit	Slippery, CirculateHit,PositionPlacement Center,StaysOnTop
+# Simulate transient; it is nicer with title.
+# Applets are usually swallowed, so disable ActivePlacement if any.
+Style FvwmApplet*	CascadePlacement
+# 
+Style FvwmButtons-ColourTable HandleWidth 2, Title, TitleAtTop
+
+Style XNoteMessage    !Title, Sticky, StaysOnTop, UsePPosition, \
+      BorderWidth 0, HandleWidth 0, !Handles, WindowListSkip
+
+#### FvwmButtons
+DestroyModuleConfig FvwmButtons: *
+*FvwmButtons: Geometry 600x38
+*FvwmButtons: Rows 1
+*FvwmButtons: Colorset 10
+*FvwmButtons: Frame 1
+*FvwmButtons: Pixmap none
+*FvwmButtons: (1x1,Icon $[themes]/applications.png, Action(Mouse 1) 'Menu "/Debian/应用程序" Root +1p +40p')
+*FvwmButtons: (1x1,Icon $[themes]/exit.png, Action(Mouse 1) FvwmScript FvwmScript-Quit)
+*FvwmButtons: (1x1,Icon $[themes]/setting.png, Action(Mouse 1) 'Menu MenuFvwmQuit Root +80p +40p')
+*FvwmButtons: (4x1,Swallow "FvwmPager-Single" 'Module FvwmPager FvwmPager-Single * *')
+*FvwmButtons: (1x1,Icon $[themes]/terminal.png, Action(Mouse 1) 'Exec exec xterm', \
+               Action(Mouse 2) 'Exec xterm')
+*FvwmButtons: (1x1,Icon $[themes]/editor.png, Action(Mouse 1) 'Exec exec emacs', \
+               Action(Mouse 3) 'Exec gvim',Action(Mouse 2) 'Exec exec libreoffice4.4')
+*FvwmButtons: (1x1,Icon $[themes]/painter.png, Action(Mouse 1) "Exec exec gimp", \
+              Action(Mouse 3) 'Exec xpaint',Action(Mouse 2) 'Exec exec display')
+*FvwmButtons: (1x1,Icon $[themes]/music.png, Action(Mouse 1) "Exec exec audacious")
+*FvwmButtons: (1x1,Icon $[themes]/video.png, Action(Mouse 1) "Exec exec vlc")
+*FvwmButtons: (1x1,Icon $[themes]/filemanager.png, Action(Mouse 1) 'Exec exec $[file_manager]', \
+              Action(Mouse 3) "Exec exec $[file_manager] /media/")
+*FvwmButtons: (1x1,Icon $[themes]/browser.png, Action(Mouse 1) FuncFvwmOpenURL "www.baidu.com",Action(Mouse 3) "Exec exec recoll")
+*FvwmButtons: (1x1,Icon $[themes]/screen.png, Action(Mouse 1) FuncFvwmIconifyAll)
+*FvwmButtons: (1x1,Icon $[themes]/help.png, Action(Mouse 1) "Exec exec yelp", \
+              Action(Mouse 2) 'FuncFvwmViewManpage fvwm',Action(Mouse 3) 'FuncFvwmViewFile $[fvwm_root]/README.txt')
+
+
+#### FvwmPager
+DestroyModuleConfig FvwmPager-Single: *
+
+*FvwmPager-Single: Colorset * 14
+*FvwmPager-Single: HilightColorset * 15
+*FvwmPager-Single: WindowColorsets 1 2
+*FvwmPager-Single: BalloonColorset * 16 
+*FvwmPager-Single: Font None
+*FvwmPager-Single: Balloons            All
+*FvwmPager-Single: BalloonYOffset      +2
+*FvwmPager-Single: BalloonBorderWidth  1
+
+
+#### FvwmTaskBar
+DestroyModuleConfig FvwmTaskBar: *
+*FvwmTaskBar: Geometry +0-0
+*FvwmTaskBar: Colorset 17
+*FvwmTaskBar: FocusColorset 18
+*FvwmTaskBar: IconColorset 19
+*FvwmTaskBar: TipsColorset 16
+
+*FvwmTaskBar: Action Click1 FuncFvwmDeiconifyFocusAndRaise
+*FvwmTaskBar: Action Click2 Thumbnail
+*FvwmTaskBar: Action Click3 Menu MenuFvwmWindowOps Mouse +0 -100m
+
+*FvwmTaskBar: UseSkipList
+*FvwmTaskBar: UseIconNames
+*FvwmTaskBar: AutoStick
+*FvwmTaskBar: ShowTips
+
+*FvwmTaskBar: ButtonWidth 180
+*FvwmTaskBar: BellVolume 20
+*FvwmTaskBar: MailCommand FuncFvwmRunInXterm "Mail" "mail"
+*FvwmTaskBar: ClockFormat %H:%M
+
+*FvwmTaskBar: StartName 开始
+*FvwmTaskBar: StartMenu MenuFvwmRoot
+*FvwmTaskBar: StartIcon mini.debian.xpm 
+
+# Animation
+*FvwmTaskBar: NoIconAction SendToModule FvwmAnimate animate
+
+#### FvwmWinList
+DestroyModuleConfig FvwmWinList: *
+
+*FvwmWinList: Geometry +0-0
+*FvwmWinList: Colorset 17
+*FvwmWinList: FocusColorset 18
+*FvwmWinList: IconColorset 19
+*FvwmWinList: Action Click1 FuncFvwmDeiconifyFocusAndRaise
+*FvwmWinList: Action Click2 Thumbnail
+*FvwmWinList: Action Click3 Popup MenuFvwmWindowOps Mouse -102m c
+*FvwmWinList: UseSkipList
+*FvwmWinList: MaxWidth 180
+*FvwmWinList: MinWidth 150
+# Animation
+*FvwmWinList: NoIconAction SendToModule FvwmAnimate animate
+
+###################################################################
+
+
+
+###################################################################
+### Thumbnails
+###################################################################
+
+SetEnv fvwm_icon_size 64
+
+Style * IconBox 1 50 -290 -50,IconGrid $[fvwm_icon_size] $[fvwm_icon_size]*9/16,IconFill t l
+
+DestroyFunc Thumbnail
+AddToFunc Thumbnail
++ I Raise
++ I SetEnv Icon-$[w.id] $[w.iconfile]
++ I ThisWindow (!Shaded Iconifiable !Iconic) PipeRead \
+    "xwd -silent -id $[w.id] | convert -scale $[fvwm_icon_size] -frame 1x1 \
+    -mattecolor black -quality 0 xwd:- png:$[FVWM_USERDIR]/tmp/icon.tmp.$[w.id].png \
+    && echo WindowStyle IconOverride, Icon $[FVWM_USERDIR]/tmp/icon.tmp.$[w.id].png \
+    || echo Nop"
++ I TestRc (Match) Test (f $[HOME]/icons/$[w.miniiconfile]) PipeRead "composite -geometry +2+4 \
+    $[HOME]/icons/$[w.miniiconfile] $[FVWM_USERDIR]/tmp/icon.tmp.$[w.id].png \
+    $[FVWM_USERDIR]/tmp/icon.tmp.$[w.id].png && echo Nop \
+    || echo Beep"
++ I Iconify
+#+ I FuncFvwmShowMessage "Window ID" $[w.id]
+
+DestroyFunc DeThumbnail
+AddToFunc DeThumbnail
++ I PipeRead "echo WindowStyle Icon \\$\\[Icon-$[w.id]\\]"
++ I UnsetEnv Icon-$[w.id]
++ I Exec exec rm -f $[FVWM_USERDIR]/tmp/icon.tmp.$[w.id].png
+#+ I FuncFvwmShowMessage "Window ID" $[w.id]
+
+## 加上钩子，在恢复或最大化时执行
+*FvwmEvent: deiconify DeThumbnail
+
+#### Comment out these lines if you don't like Icons to have Titles.
+#Colorset 12 fg white, bg black, fgsh black, RootTransparent
+#Style * IconTitle, IconTitleColorset 12, HilightIconTitleColorset 12, IconTitleRelief 0
+#Style * IconFont "Shadow=1 1 SE:xft:Concielian:pixelsize=12", IndexedIconName, IconBackgroundPadding 0
+#Style * IconBackgroundRelief 0, IconBackGroundColorset 12
+
+###################################################################
+
+
+
+
+
+###################################################################
+####  函数库
+###################################################################
+#### 功能函数
+DestroyFunc FuncFvwmDeiconifyFocusAndRaise
+AddToFunc   FuncFvwmDeiconifyFocusAndRaise
++ I Thumbnail
++ I Focus
++ I Raise
+
+DestroyFunc FuncFvwmIconifyAll
+AddToFunc   FuncFvwmIconifyAll
+## 显示桌面
++ I All (!"FvwmButtons*|FvwmPager*|FvwmTask*",CurrentPage,!Iconic) Thumbnail
+
+DestroyFunc FuncFvwmShowMessage
+AddToFunc   FuncFvwmShowMessage
++ I Test (x xmessage) Exec echo "$1" | \
+	perl -pe 's/\^n/\n/g; s/\^t/\t/g; s/\^d/\$/g; s/^q/"/g; s/\^\^/^/g' - | \
+	xmessage -g 480x124 -nearmouse -title "$0" -file - \
+	-xrm "*textSink*font:lucidasans-14" \
+	-xrm "*form*scrollVertical:false" \
+	-xrm "*form*foreground:$[fg.cs35]" \
+	-xrm "*form*background:$[bg.cs35]" \
+	-xrm "*form*message*foreground:$[fg.cs36]" \
+	-xrm "*form*message*background:$[bg.cs36]" $2
++ I TestRc (!Match) FvwmPerl -e \
+	'$_ = qq{$1}; s/\^n/\n/g; s/\^t/\t/g; s/\^d/\044/g; s/\^\^/^/g; showMessage($_, $0, 1)'
+
+DestroyFunc FuncFvwmShowButtonInfo
+AddToFunc   FuncFvwmShowButtonInfo
++ I FuncFvwmShowMessage "Button Info" "$0"
+
+DestroyFunc FuncFvwmMenuDirectory
+AddToFunc   FuncFvwmMenuDirectory
++ I PipeRead 'fvwm-menu-directory -d "$0" --exec-file "^emacs" --check-subdir --links --wm-icons'
+
+DestroyFunc FuncFvwmRaiseAndExec
+AddToFunc   FuncFvwmRaiseAndExec
++ I Raise
++ I Exec $*
+
+DestroyFunc FuncFvwmWindowPrint
+AddToFunc   FuncFvwmWindowPrint
++ I FuncFvwmRaiseAndExec which xdpr >/dev/null 2>&1 && (xdpr -id $[w.id]; true) || (import -window $[w.id] - | lpr)
+
+DestroyFunc FuncFvwmWindowPrintReverse
+AddToFunc   FuncFvwmWindowPrintReverse
++ I FuncFvwmRaiseAndExec which xdpr >/dev/null 2>&1 && (xdpr 1/2 -h -rv -id $[w.id]; true) || (import -window $[w.id] -rotate 90 - | lpr)
+
+DestroyFunc FuncFvwmWindowCreateScreenshot
+AddToFunc   FuncFvwmWindowCreateScreenshot
+# Can't use PipeRead here if we want to use this function from mini-icon button
+#+ I PipeRead `import -frame -window $[w.id] $[fvwm_root]/tmp/$USER-shot-window-$[w.id].png`
++ I FuncFvwmRaiseAndExec import -frame -window $[w.id] $[fvwm_root]/tmp/$USER-shot-window-$[w.id].png
++ I FuncFvwmShowMessage "$[gt.Screenshot Info for window] $[w.id]" "$[gt.You should have 'import' utility from ImageMagick.^nCheck the screenshot in] $[fvwm_root]/tmp/$USER-shot-window-$[w.id].png"
+
+DestroyFunc FuncFvwmDesktopCreateScreenshot
+AddToFunc   FuncFvwmDesktopCreateScreenshot
++ I PipeRead `import -window root $[fvwm_root]/tmp/$USER-shot-desktop.png`
++ I FuncFvwmShowMessage "$[gt.Screenshot Info for the desktop]" "$[gt.You should have 'import' utility from ImageMagick.^nCheck the screenshot in] $[fvwm_root]/tmp/$USER-shot-desktop.png"
+
+DestroyMenu MenuFvwmBrowser
+AddToMenu   MenuFvwmBrowser
++ DynamicPopupAction Piperead 'fvwm-menu-directory -r -na MenuFvwmBrowser -d $HOME -s --exec-file "^emacs" --xte="xterm -e" --wm-icons --check-subdir'
+
+DestroyMenu MenuFvwmBrowserCached
+AddToMenu   MenuFvwmBrowserCached
++ DynamicPopupAction Piperead 'fvwm-menu-directory -all -r -na MenuFvwmBrowserCached -d $HOME -s --exec-file "^emacs" --xte="xterm -e" --wm-icons --check-subdir'
+
+DestroyFunc FuncFvwmViewInfo
+AddToFunc   FuncFvwmViewInfo
++ I Exec exec xterm -fg $[fg.cs33] -bg $[bg.cs33] -n "Info - $0" -T "Info - $0" -e info "$0"
+
+DestroyFunc FuncFvwmViewManPage
+AddToFunc   FuncFvwmViewManPage
++ I Exec exec xterm -fg $[fg.cs33] -bg $[bg.cs33] -n "Manual Page - $0" -T "Manual Page - $0" -e man "$0"
+
+DestroyFunc FuncFvwmViewFile
+AddToFunc   FuncFvwmViewFile
++ I Exec exec xterm -fg $[fg.cs33] -bg $[bg.cs33] -n  "File Viewer - $0" -T "File Viewer - $0" -e less -e "$0"
+
+DestroyFunc FuncFvwmEditFile
+AddToFunc   FuncFvwmEditFile
++ I Test (x emacs) Exec exec emacs "$0"
++ I TestRc (Match) Break
++ I Test (EnvIsSet EDITOR) FuncFvwmRunInXterm 'Edit File - $0' '$ENV[EDITOR] "$0"'
++ I TestRc (!Match) FuncFvwmRunInXterm 'Edit File - $0' 'vi "$0"'
+
+DestroyFunc FuncFvwmViewFileTail
+AddToFunc   FuncFvwmViewFileTail
++ I Exec exec xterm -fg $[fg.cs33] -bg $[bg.cs33] -n "Tail File - $0" -T "Tail File - $0" -e less +F -f "$1"
+
+DestroyFunc FuncFvwmOpenURL
+AddToFunc   FuncFvwmOpenURL
++ I Test (x firefox) Exec firefox '$0'
++ I TestRc (!Match) Test (x netscape) Exec netscape -remote 'openURL($0, new-window)' 2>/dev/null || netscape '$0'
++ I TestRc (!Match) Test (x galeon) Exec galeon '$0'
++ I TestRc (!Match) Test (x konqueror) Exec konqueror '$0'
++ I TestRc (!Match) Test (x opera) Exec opera '$0'
++ I TestRc (!Match) FuncFvwmRunInXterm 'Open URL - $0' 'links "$0"'
+
+DestroyFunc FuncFvwmRunInXterm
+AddToFunc   FuncFvwmRunInXterm
++ I exec xterm -fg $[fg.cs34] -bg $[bg.cs34] +sb -ut -T "$0" -n "$0" -e $1
+
+###################################################################
+
+
+
+
+
+###################################################################
+#### 菜单数据
+###################################################################
+DestroyMenu MenuFvwmRoot
+AddToMenu   MenuFvwmRoot
++ "Root Menu" Title
++ "X终端%mini.term.xpm%" Exec exec xterm
++ "家目录%mini.folder.xpm%" Exec exec /usr/bin/$[file_manager]
++ "应用程序%mini.icons.xpm%" Popup "/Debian/应用程序"
++ "我的电脑%mini.filemgr.xpm%" Exec exec /usr/bin/$[file_manager] /media
++ "FVWM%mini.fvwm.xpm%" Popup MenuFvwmQuit
++ "帮助%mini.book1.xpm%" Popup "/我的帮助"
++ "搜索%mini.eyes.xpm%" Exec exec recoll
++ "屏幕%mini.monitor.xpm%" Popup "/屏幕"
++ "配置%mini.go.xpm%"  Popup MenuFvwmConfiguration
++ "离开%mini.exit.xpm%"    FvwmScript FvwmScript-Quit
+
+### 用update-menu自动生成应用程序菜单
+DestroyFunc SetDebianMenu
+AddToFunc   SetDebianMenu
++ I Read /etc/X11/fvwm/menudefs.hook
++ I Test (F $[FVWM_USERDIR]/menudefs.hook) Read menudefs.hook quiet
+
+Test (f  /etc/X11/fvwm/menudefs.hook) SetDebianMenu
+
+DestroyMenu "/我的帮助"
+AddToMenu   "/我的帮助" "帮助" Title Top
++ "$[gt.Debian]%mini.book1.xpm%"        Exec exec yelp
++ "$[gt.Fvwm]%mini.book1.xpm%"          FuncFvwmViewManpage fvwm
++ "$[gt.About]%mini.book1.xpm%"         FuncFvwmViewFile $[fvwm_root]/README.txt
+
+DestroyMenu MenuFvwmQuit
+AddToMenu   MenuFvwmQuit
++ "$[gt.FVWM]" Title
++ "$[gt.刷新]%menu/refresh.xpm%"          Refresh
++ "$[gt.拷屏(窗口)]%menu/refresh.xpm%"    Pick FuncFvwmWindowCreateScreenshot 
++ "$[gt.拷屏(桌面)]%menu/refresh.xpm%"    FuncFvwmDesktopCreateScreenshot 
++ "$[gt.重载配置]%menu/restart.xpm%"      Restart
+
+
+DestroyMenu "/屏幕"
+AddToMenu   "/屏幕" "屏幕" Title Top
++ "&屏保" Popup "/屏幕/屏保"
++ "&锁定" Popup "/屏幕/锁定"
+
+DestroyMenu "/屏幕/屏保"
+AddToMenu   "/屏幕/屏保" "屏保" Title Top
++ "&Activate ScreenSaver (Next)" Exec exec /usr/bin/xscreensaver-command -next
++ "Activate ScreenSaver (&Previous)" Exec exec /usr/bin/xscreensaver-command -prev
++ "A&ctivate ScreenSaver (Random)" Exec exec /usr/bin/xscreensaver-command -activate
++ "&Demo Screen Hacks" Exec exec /usr/bin/xscreensaver-command -demo
++ "Disable &XScreenSaver" Exec exec /usr/bin/xscreensaver-command -exit
++ "&Enable XScreenSaver" Exec exec /usr/bin/xscreensaver
++ "&Reinitialize XScreenSaver" Exec exec /usr/bin/xscreensaver-command -restart
++ "&ScreenSaver Preferences" Exec exec /usr/bin/xscreensaver-command -prefs
+
+DestroyMenu "/屏幕/锁定"
+AddToMenu   "/屏幕/锁定" "锁定" Title Top
++ "&Lock Screen (XScreenSaver)" Exec exec /usr/bin/xscreensaver-command -lock
+
+
+DestroyMenu MenuFvwmConfiguration
+AddToMenu   MenuFvwmConfiguration  "配置" Title Nop
++ "$[gt.&Root Cursor]%menu/display.xpm%"          Module FvwmForm FvwmForm-RootCursor
++ "$[gt.Form &Defaults]%menu/configuration.xpm%"  Module FvwmForm FvwmForm-Form
++ "$[gt.&X Configuration]%menu/display.xpm%"      Popup MenuFvwmXConfiguration
+Test (f  /etc/X11/fvwm/menudefs.hook) + "$[gt.&Re-read System Menu]%menu/terminal.xpm%" Read "/etc/X11/fvwm/menudefs.hook"
+Test (f  /etc/X11/fvwm/menudefs.hook) + "$[gt.&Update My Debian Menu]%menu/terminal.xpm%" PipeRead 'update-menus --nodpkgcheck &&  echo "Read menudefs.hook"'
+
+DestroyMenu MenuFvwmXConfiguration
+AddToMenu   MenuFvwmXConfiguration
++ "$[gt.X Configuration]" Title
++ "$[gt.BaseConfig]%menu/config.xpm%" FvwmScript FvwmScript-BaseConfig
++ "$[gt.Colorset]%menu/color.xpm%"    FvwmScript FvwmScript-Colorset
++ "$[gt.Bell]%menu/sound.xpm%"        FvwmScript FvwmScript-BellSetup
++ "$[gt.KeyBoard]%menu/keyboard.xpm%" FvwmScript FvwmScript-KeyboardSetup
++ "$[gt.Screen]%menu/display.xpm%"    FvwmScript FvwmScript-ScreenSetup
++ "$[gt.Mouse]%menu/mouse.xpm%"       FvwmScript FvwmScript-PointerSetup
+
+# This defines all window operations
+DestroyMenu MenuFvwmWindowOps
+AddToMenu   MenuFvwmWindowOps
++ "$[gt.Window Operations]" Title
++ "$[gt.&Move]	%menu/window-move.xpm%"             Move
++ "$[gt.(De)&Iconify]	Ctrl-F10%menu/window-iconify.xpm%"   Thumbnail
++ "$[gt.(Un)Ma&ximize]	Alt-F10%menu/window-maximize.xpm%"  Maximize
++ "$[gt.(Un)Shade]	Alt-F5%menu/window-shade.xpm%"     WindowShade
++ "$[gt.&Close]	Alt-F4%menu/window-close.xpm%"             Close
++ "$[gt.Destroy]	%menu/window-destroy.xpm%"         Destroy
++ "$[gt.Move to Right Page]	Alt-F6%menu/window-move.xpm%"      AnimatedMove w+100 w
++ "$[gt.Move to Left Page]	Ctrl-F6%menu/window-move.xpm%"      AnimatedMove w-100 w
++ "$[gt.Identify]	Alt-F11%menu/window-identify.xpm%" Module FvwmIdent
+

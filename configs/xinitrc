@@ -1,0 +1,9 @@
+xrdb -load ~/.Xresources
+export XMODIFIERS=”@im=fcitx”
+export XIM=fcitx
+export XIM_PROGRAM=fcitx
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+fcitx &
+volumeicon &
+exec fvwm  >> ~/fvwm.txt

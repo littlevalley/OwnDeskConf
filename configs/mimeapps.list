@@ -1,0 +1,27 @@
+[Added Associations]
+application/pdf=firefox-esr.desktop;xpdf.desktop;wps-office-wps.desktop;
+application/vnd.oasis.opendocument.text=wps-office-wps.desktop;
+text/plain=userapp-emacsclient-DKAGA0.desktop;wps-office-et.desktop;
+application/x-mimearchive=firefox-esr.desktop;
+application/x-xpinstall=firefox-esr.desktop;
+application/x-ms-dos-executable=userapp-wine-10339Z.desktop;userapp-wine-I3K99Z.desktop;
+text/html=firefox-esr.desktop;
+image/jpeg=gthumb.desktop;
+video/mpeg=vlc.desktop;
+audio/mpeg=audacious.desktop;
+audio/basic=audacious.desktop;
+image/png=gthumb.desktop;
+
+[Default Applications]
+application/pdf=xpdf.desktop
+application/x-ms-dos-executable=userapp-wine-10339Z.desktop
+text/html=firefox-esr.desktop
+image/jpeg=gthumb.desktop
+video/mpeg=vlc.desktop
+text/plain=userapp-emacsclient-DKAGA0.desktop
+audio/mpeg=audacious.desktop
+audio/basic=audacious.desktop
+image/png=gthumb.desktop
+
+[Removed Associations]
+application/x-ms-dos-executable=userapp-wine-86G79Z.desktop;userapp-wine-COK49Z.desktop;userapp-wine-82439Z.desktop;userapp-wine-X4LNA0.desktop;

@@ -1,0 +1,58 @@
+use_xft yes
+xftfont Nimbus Roman No9 L:size=12
+xftalpha 0.1
+update_interval 1
+total_run_times 0
+own_window no
+own_window_type override
+own_window_transparent no
+own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
+double_buffer yes
+minimum_size 150 5
+maximum_width 400
+draw_shades no
+draw_outline no
+draw_borders no
+draw_graph_borders no
+default_color white
+default_shade_color red
+default_outline_color green
+alignment top_right
+gap_x 0
+gap_y 0
+no_buffers yes
+uppercase no
+cpu_avg_samples 2
+net_avg_samples 1
+override_utf8_locale yes
+use_spacer yes
+
+
+TEXT
+${if_existing /proc/net/route wlan0}
+${voffset -40}
+Down: ${downspeed wlan0}${alignr 15}Received: ${totaldown wlan0}
+IP: ${addr wlan0} ${alignr 25} Signal: ${wireless_link_qual wlan0}% ${alignr 15}Bat:${execi 10 ~/.fvwm/scripts/bat.sh} 
+Up: ${upspeed wlan0}${alignr 15}Sent: ${totalup wlan0}
+${else}
+${if_existing /proc/net/route usb0}
+${voffset -60}
+Down: ${downspeed usb0}${alignr 15}Received: ${totaldown usb0}
+IP: ${addr usb0}${alignr 15}Bat:${execi 10 ~/.fvwm/scripts/bat.sh} 
+Up: ${upspeed usb0}${alignr 15}Sent: ${totalup usb0}
+${else}
+${if_existing /proc/net/route eth0}
+${voffset -80}
+Down: ${downspeed eth0}${alignr 15}Received: ${totaldown eth0}
+IP: ${addr eth0}${alignr 15}Bat:${execi 10 ~/.fvwm/scripts/bat.sh} 
+Up: ${upspeed eth0}${alignr 15}Sent: ${totalup eth0}
+${else}
+${voffset -80}
+Network disconnected. 
+Bat:${execi 10 ~/.fvwm/scripts/bat.sh} 
+${endif}${endif}${endif}
+${voffset -40}
+$stippled_hr
+${voffset -20}${color EAEAEA}${font GE Inspira:pixelsize=90}${time %H:%M}${font}${voffset -65}${offset 5}${color FFA300}${font GE Inspira:pixelsize=35}${time %d} ${voffset -10}${color EAEAEA}${font GE Inspira:pixelsize=22}${time  %m} ${time %Y}${font}${voffset 20}${font GE Inspira:pixelsize=35}${offset -108}${time %A}${font}
+${voffset 10}${offset 20}${font Ubuntu:pixelsize=10}${color FFA300}HD ${offset 9}$color${fs_free /} / ${fs_size /}${offset 30}${color FFA300}RAM ${offset 9}$color$mem / $memmax${offset 30}${color FFA300}CPU ${offset 9}$color${cpu cpu0}%${font}${font}
+$stippled_hr

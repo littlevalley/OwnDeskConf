@@ -1,0 +1,8 @@
+fvwmrestart
+exit
+quit
+fvwmscript fvwmscript-datetime
+module fvwmscript fvwmscript-datetime
+FvwnScript FvwmScript-DateTime
+Module
+FvwmScript FvwmScript-DateTime

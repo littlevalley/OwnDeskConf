@@ -1,0 +1,105 @@
+# vim: filetype=fvwm
+SetEnv fvwm             $[HOME]/.fvwm/
+SetEnv RegularFont "StringEncoding=utf8:xft:Vera Sans YuanTi Mono:size=9:encoding=iso10646-1"
+SetEnv HeiFont "StringEncoding=utf8:xft:STHeiti:size=10:encoding=iso10646-1"
+
+DesktopSize 2x2                         #每个桌面分成2x2个页面
+DesktopName 0 Main                      #设置了1个桌面
+
+MenuStyle * BorderWidth 1, Font "$[RegularFont]"
+DestroyMenu MenuFvwmRoot
+
+Module FvwmCommandS
+CursorStyle DEFAULT right_ptr
+Exec exec "$[fvwm]autostart.pl"
+####################################################
+Style * !Title, HandleWidth 3
+
+Style * MouseFocusClickRaises           #点击窗体上升
+#IgnoreModifiers L25
+########################
+# Super，用于热键组合。位于Mod4。xmodmap -pm查看
+Key r A 4 JumpExec "Rox" rox
+Key o A 4 JumpExec "Opera" opera
+Key q A 4 JumpExec "GQview" gqview
+Key n A 4 JumpExec "zim" zim
+
+Key t A 4 Exec exec xterm
+Key m A 4 Exec exec xterm -e mocp
+Key e A 4 Exec exec xterm -e ~/应用/脚本/ea.pl
+Key z A 4 All (xterm) shadex
+
+Key p A 4 Exec exec ~/应用/脚本/截图或贴图.bash 1
+Key d A 4 Exec exec ~/应用/脚本/sdcv.pl -n
+Key a A 4 Exec exec ~/应用/脚本/ip-show.bash
+Key g A 4 Exec exec ~/应用/脚本/g-translate.pl -n
+
+########################
+# Fn-[F10...F12]
+Key XF86AudioMute A A Exec exec amixer set Master toggle
+Key XF86AudioLowerVolume A A Exec exec amixer set Master 10%-
+Key XF86AudioRaiseVolume A A Exec exec amixer set Master 10%+
+# Fn加上下光标，
+#Key XF86AudioPlay A A Exec exec amixer set Master 10%-
+#Key XF86AudioStop A A Exec exec amixer set Master 10%+
+# Fn加左右光标，定义于~/.xmodmaprc
+Key XF86AudioPrev A A Exec exec mocp -r
+Key XF86AudioNext A A Exec exec mocp -f
+################################################
+#-------------Super+ 窗口操作---------------
+Mouse 1 R 4 Exec kupfer
+Mouse 1 W 4 Move        # +单击，拖动
+Mouse 2 W 4 Stick       # +中键，总是可见
+Mouse 3 W 4 Resize      # +右击，缩放
+Mouse 4 W 4 Maximize    # +上滚轮，最大化
+Mouse 5 W 4 Iconify     # +下滚轮，最小化
+Mouse 1 I A WindowListFunc
+#+方向键，对齐到屏幕边缘
+Key Up          W 4 Move w 0
+Key Down        W 4 Move w -0
+Key Left        W 4 Move 0 w
+Key Right       W 4 Move -0 w
+# Super加[1 2 3 4]移动当前窗口到4个桌面。
+Key 1 W 4 PointerWindow MoveToPage 0 0
+Key 2 W 4 PointerWindow MoveToPage 1 0
+Key 3 W 4 PointerWindow MoveToPage 0 1
+Key 4 W 4 PointerWindow MoveToPage 1 1
+
+#-------------IconBox 设置
+Style * IconBox 1000x100+40-40, IconGrid 20 20, IconFill right bottom, IconSize 48 48
+Style * !IconTitle, IconTitleRelief 0, IndexedIconName, IconBackgroundPadding 0, IconBackgroundRelief 0
+########################
+# 修正系统函数：恢复窗口时，鼠标居中
+AddToFunc WindowListFunc
++ I WarpToWindow 50 50
+########################
+# Jump & Exec 函数
+DestroyFunc JumpExec
+AddToFunc JumpExec
++ I All ($0) WindowListFunc
++ I TestRc (NoMatch) Exec exec $1 &
+########################
+# 切换xterm卷帘的函数
+DestroyFunc shadex
+AddToFunc shadex
++ I ThisWindow PipeRead '[ $[w.y] -gt 200 ] && echo WindowShade S || echo WindowShade N'
+
+########################
+# 样式设置
+
+#设置开启窗口，自动定位到指定桌面
+Style rox       StartsOnPage 0 0, PositionPlacement Center
+Style gimp      StartsOnPage 1 1
+Style gqview    StartsOnPage 1 1
+Style filezilla StartsOnPage 0 1
+Style opera     StartsOnPage 1 0, SkipMapping   #后台启动
+Style transmission StartsOnPage 0 1
+
+Style xterm     !Title, !Borders, !Iconifiable, Sticky, StaysOnTop, WindowListSkip
+
+Style dock      !Title, !Borders, !Iconifiable, Sticky, StaysOnBottom
+Style tint2     UseStyle dock
+Style *panel    UseStyle dock
+Style *dock     UseStyle dock
+Style *tray     UseStyle dock
+Style *clock    UseStyle dock
